@@ -13,6 +13,7 @@ import { dbConnection } from './db/connection';
 import Routes from './common/interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './common/utils/logger';
+import EventEmitter from '../src/common/utils/eventEmitter';
 
 class App {
   public app: express.Application;
