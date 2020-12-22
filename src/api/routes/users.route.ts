@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import UsersController from '../controllers/users.controller';
-import { CreateUserDto } from '../common/dtos/users.dto';
-import Route from '../common/interfaces/routes.interface';
+import UsersController from '../../controllers/users.controller';
+import { CreateUserDto } from '../../common/dtos/users.dto';
+import Route from '../../common/interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
 

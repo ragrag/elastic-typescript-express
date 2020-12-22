@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { isBoom, Boom } from '@hapi/boom';
-import { logger } from '../common/utils/logger';
+import { logger } from '../../common/utils/logger';
 
 function errorMiddleware(error: Boom | Error, req: Request, res: Response, next: NextFunction) {
   console.log(res);

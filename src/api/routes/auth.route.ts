@@ -3,9 +3,9 @@ import passport from 'passport';
 import '../middlewares/passport';
 import githubAccessTokenMiddleware from '../middlewares/githubAccessToken.middleware';
 import googleAccessTokenMiddleware from '../middlewares/googleAccessToken.middleware';
-import AuthController from '../controllers/auth.controller';
-import { CreateUserDto } from '../common/dtos/users.dto';
-import Route from '../common/interfaces/routes.interface';
+import AuthController from '../../controllers/auth.controller';
+import { CreateUserDto } from '../../common/dtos/users.dto';
+import Route from '../../common/interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
 

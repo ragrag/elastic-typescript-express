@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import request from 'supertest';
-import App from '../app';
-import IndexRoute from '../routes/index.route';
+import App from '../../app';
+import IndexRoute from '../../api/routes/index.route';
 
 afterAll(async () => {
   await new Promise<void>(resolve => setTimeout(() => resolve(), 500));

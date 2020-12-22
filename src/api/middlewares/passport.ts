@@ -5,7 +5,7 @@ import JwtCookieComboStrategy = require('passport-jwt-cookiecombo');
 import FacebookTokenStrategy = require('passport-facebook-token');
 import GitHubTokenStrategy = require('passport-github-token');
 import GoogleTokenStrategy = require('passport-google-oauth-token');
-import { User } from '../entities/users.entity';
+import { User } from '../../entities/users.entity';
 
 passport.use(
   new JwtCookieComboStrategy(
