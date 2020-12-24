@@ -10,7 +10,11 @@
     "build": "tsc",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "typeorm": "cross-env NODE_ENV=migration ts-node  ./node_modules/typeorm/cli.js --config src/db/connection.ts",
+    "typeorm:migrate": "npm run typeorm migration:generate -- -n",
+    "typeorm:run": "npm run typeorm migration:run",
+    "typeorm:revert": "npm run typeorm migration:revert"  
   },
   "dependencies": {
     "@hapi/boom": "^9.1.0",

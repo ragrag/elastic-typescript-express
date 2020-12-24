@@ -9,11 +9,10 @@ import compression from 'compression';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { createConnection } from 'typeorm';
-import { dbConnection } from './db/connection';
+import dbConnection from './db/connection';
 import Routes from './common/interfaces/routes.interface';
 import errorMiddleware from './api/middlewares/error.middleware';
 import { logger, stream } from './common/utils/logger';
-import EventEmitter from '../src/common/utils/eventEmitter';
 
 class App {
   public app: express.Application;
