@@ -2,18 +2,25 @@ import 'dotenv/config';
 import request from 'supertest';
 import App from '../../app';
 import IndexRoute from '../../api/routes/index.route';
+import { db } from '../util/db';
 
-afterAll(async () => {
-  await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
+let app;
+beforeAll(async () => {
+  const indexRoute = new IndexRoute();
+  app = new App([indexRoute]);
+  await app.initializeApp();
 });
 
-describe('Testing Index', () => {
-  describe('[GET] /', () => {
-    it('response statusCode 200', () => {
-      const indexRoute = new IndexRoute();
-      const app = new App([indexRoute]);
+beforeEach(async () => {
+  await db.clear();
+});
 
-      return request(app.getServer()).get(`/api/v1/`).expect(200);
+describe('Index', () => {
+  describe('[GET] /', () => {
+    it('response statusCode 200', async done => {
+      const res = await request(app.getServer()).get(`/api/v1/`);
+      expect(res.status).toBe(200);
+      done();
     });
   });
 });

@@ -18,15 +18,18 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-
+  public routes: Routes[];
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
+    this.routes = routes;
+  }
 
-    this.connectToDatabase();
+  public async initializeApp() {
+    await this.connectToDatabase();
     this.initializeMiddlewares();
-    this.initializeRoutes(routes);
+    this.initializeRoutes(this.routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
   }
@@ -41,14 +44,14 @@ class App {
     return this.app;
   }
 
-  private connectToDatabase() {
-    createConnection(dbConnection)
-      .then(() => {
-        logger.info('🟢 The database is connected.');
-      })
-      .catch((error: Error) => {
-        logger.error(`🔴 Unable to connect to the database: ${error}.`);
-      });
+  private async connectToDatabase() {
+    try {
+      const connection = await createConnection(dbConnection);
+      await connection.driver.afterConnect();
+      logger.info('🟢 The database is connected.');
+    } catch (err) {
+      logger.error(`🔴 Unable to connect to the database: ${err}.`);
+    }
   }
 
   private initializeMiddlewares() {
@@ -83,11 +86,12 @@ class App {
           description: 'Example docs',
         },
       },
-      apis: ['swagger.yaml'],
+      apis: ['./src/api/spec/swagger.yaml'],
     };
 
     const specs = swaggerJSDoc(options);
     this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+    logger.info('🚀 API Docs running at /api/docs');
   }
 
   private initializeErrorHandling() {

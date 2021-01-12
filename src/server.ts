@@ -7,8 +7,10 @@ import UsersRoute from './api/routes/users.route';
 
 import validateEnv from './common/utils/validateEnv';
 
-validateEnv();
+(async () => {
+  validateEnv();
 
-const app = new App([new IndexRoute(), new UsersRoute(), new AuthRoute()]);
-
-app.listen();
+  const app = new App([new IndexRoute(), new UsersRoute(), new AuthRoute()]);
+  await app.initializeApp();
+  app.listen();
+})();

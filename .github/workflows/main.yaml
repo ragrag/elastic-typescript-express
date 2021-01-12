@@ -1,0 +1,47 @@
+name: Node.js CI
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  #push:
+    #branches:
+      #- main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup PostgreSQL
+      uses: harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: 11
+        postgresql db: dpentagon-test
+        postgresql user: postgres
+        postgresql password: root
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: npm install
+    - run: npm test
+      env:
+        CI: true
+        DATABASE_URL:  ${{ secrets.DATABASE_URL }}
+        DATABASE_URL_DEV: ${{ secrets.DATABASE_URL_DEV }}
+        DATABASE_URL_TEST:  ${{ secrets.DATABASE_URL_TEST }}
+        JWT_SECRET:  ${{ secrets.JWT_SECRET }}
+        JWT_RESET_SECRET: ${{ secrets.JWT_RESET_SECRET }}
+        FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+        FACEBOOK_APP_SECRET: ${{ secrets.FACEBOOK_APP_SECRET }}
+        FACEBOOK_ACCESS: ${{ secrets.FACEBOOK_ACCESS }}
+        GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        GITHUB_CLIENT_ID: ${{ secrets._GITHUB_CLIENT_ID }}
+        GITHUB_CLIENT_SECRET: ${{ secrets._GITHUB_CLIENT_SECRET }}
+      
