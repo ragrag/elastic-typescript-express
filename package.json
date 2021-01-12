@@ -6,13 +6,13 @@
   "license": "ISC",
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node build/server.js",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
     "dev:debug": "cross-env NODE_ENV=development nodemon --inspect src/server.ts",
     "build": "tsc",
-    "test": "jest --forceExit --detectOpenHandles",
+    "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles --verbose --silent",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
-    "typeorm": "cross-env NODE_ENV=migration ts-node  ./node_modules/typeorm/cli.js --config src/db/connection.ts",
+    "typeorm": "cross-env NODE_ENV=development ts-node  ./node_modules/typeorm/cli.js --config src/db/connection.ts",
     "typeorm:migrate": "npm run typeorm migration:generate -- -n",
     "typeorm:run": "npm run typeorm migration:run",
     "typeorm:revert": "npm run typeorm migration:revert"  

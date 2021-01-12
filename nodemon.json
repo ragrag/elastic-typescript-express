@@ -4,10 +4,12 @@
         ".env"
     ],
     "verbose": false,
-    "ext": "js,ts,json",
+    "ext": "js,ts,json,yaml",
     "ignore": [
         "src/**/*.spec.ts",
         "src/**/*.test.ts"
     ],
-    "exec": "ts-node  --transpile-only src/server.ts"
+    "execMap": { 
+        "ts": "node --require ts-node/register/transpile-only"
+      }
 }

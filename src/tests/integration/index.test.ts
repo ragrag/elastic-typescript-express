@@ -16,7 +16,7 @@ beforeEach(async () => {
 });
 
 describe('Index', () => {
-  describe('[GET] /', () => {
+  describe('[GET] /api/v1/', () => {
     it('response statusCode 200', async done => {
       const res = await request(app.getServer()).get(`/api/v1/`);
       expect(res.status).toBe(200);
