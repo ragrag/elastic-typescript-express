@@ -8,9 +8,8 @@ import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
 class UsersRoute implements Route {
   public path = '/users';
   public router = Router();
-  public usersController = new UsersController();
 
-  constructor() {
+  constructor(private usersController = new UsersController()) {
     this.initializeRoutes();
   }
 

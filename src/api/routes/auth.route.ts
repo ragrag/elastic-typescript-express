@@ -11,9 +11,8 @@ import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
 
 class AuthRoute implements Route {
   public router = Router();
-  public authController = new AuthController();
 
-  constructor() {
+  constructor(private authController = new AuthController()) {
     this.initializeRoutes();
   }
 

@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateUserDto } from '../common/dtos/users.dto';
 import { User } from '../entities/users.entity';
-import userService from '../services/users.service';
+import UserService from '../services/users.service';
 
 class UsersController {
-  public userService = new userService();
+  constructor(private userService = new UserService()) {}
 
   public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

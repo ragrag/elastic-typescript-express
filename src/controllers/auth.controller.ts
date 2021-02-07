@@ -6,8 +6,7 @@ import { User } from '../entities/users.entity';
 import AuthService from '../services/auth.service';
 
 class AuthController {
-  public authService = new AuthService();
-
+  constructor(private authService = new AuthService()) {}
   public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: CreateUserDto = req.body;
