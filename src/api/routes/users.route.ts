@@ -14,10 +14,8 @@ class UsersRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.usersController.getUsers);
-    this.router.get(`${this.path}/:id`, [jwtAuthMiddeware], this.usersController.getUserById);
-    this.router.post(`${this.path}`, validationMiddleware(CreateUserDto, 'body'), this.usersController.createUser);
-    this.router.put(`${this.path}/:id`, validationMiddleware(CreateUserDto, 'body', true), this.usersController.updateUser);
+    this.router.get(`/user`, [jwtAuthMiddeware], this.usersController.getUser);
+    this.router.get(`${this.path}/:id`, [jwtAuthMiddeware], this.usersController.findUserById);
     this.router.delete(`${this.path}/:id`, this.usersController.deleteUser);
   }
 }

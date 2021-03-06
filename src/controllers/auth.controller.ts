@@ -7,21 +7,22 @@ import AuthService from '../services/auth.service';
 
 class AuthController {
   constructor(private authService = new AuthService()) {}
-  public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: CreateUserDto = req.body;
-      const signUpUserData: User = await this.authService.signup(userData);
+      const { user, token } = await this.authService.register(userData);
 
-      res.status(201).json({ id: signUpUserData.id });
+      const userResponse = _.omit(user, ['password']);
+      res.status(201).json({ ...userResponse, token });
     } catch (error) {
       next(error);
     }
   };
 
-  public logIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: CreateUserDto = req.body;
-      const { token, findUser } = await this.authService.login(userData);
+      const { user, token } = await this.authService.login(userData);
 
       res.cookie('Authorization', token, {
         httpOnly: true,
@@ -29,7 +30,8 @@ class AuthController {
         sameSite: 'strict',
         secure: true,
       });
-      const userResponse = _.pick(req.user, ['email', 'displayName', 'id']);
+
+      const userResponse = _.omit(user, ['password']);
 
       res.status(200).json({ ...userResponse, token });
     } catch (error) {
@@ -39,7 +41,7 @@ class AuthController {
   };
 
   public authenticateSocial = async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = await this.authService.createToken(req.user as User);
+    const { token } = await AuthService.createAuthToken(req.user as User);
 
     res.cookie('Authorization', token, {
       httpOnly: true,
@@ -47,11 +49,12 @@ class AuthController {
       sameSite: 'strict',
       secure: true,
     });
-    const userResponse = _.pick(req.user, ['email', 'displayName', 'id']);
+
+    const userResponse = _.omit(req.user, ['password']);
     return res.status(200).json({ token: token, ...userResponse });
   };
 
-  public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public logout = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       res.clearCookie('Authorization');
       res.status(200).send();

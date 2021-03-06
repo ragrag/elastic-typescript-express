@@ -7,35 +7,36 @@ import { User } from '../entities/users.entity';
 import { isEmpty } from '../common/utils/util';
 
 class AuthService {
-  public async signup(userData: CreateUserDto): Promise<User> {
+  public async register(userData: CreateUserDto): Promise<{ user: User; token: string }> {
     if (isEmpty(userData)) throw Boom.badRequest();
 
     const findUser: User = await User.findOne({ where: { email: userData.email } });
     if (findUser) throw Boom.conflict(`You're email ${userData.email} already exists`);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const createUserData: User = await User.save({ ...userData, password: hashedPassword } as User);
-    return createUserData;
+    const createdUser: User = await User.save({ ...userData, password: hashedPassword } as User);
+
+    const { token } = AuthService.createAuthToken(createdUser);
+    return { user: createdUser, token };
   }
 
-  public async login(userData: CreateUserDto): Promise<{ token: string; findUser: User }> {
+  public async login(userData: CreateUserDto): Promise<{ user: User; token: string }> {
     if (isEmpty(userData)) throw Boom.badRequest();
 
-    const findUser: User = await User.findOne({ where: { email: userData.email } });
-    if (!findUser) throw Boom.notFound();
+    const user: User = await User.findOne({ where: { email: userData.email } });
+    if (!user) throw Boom.notFound();
 
-    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password);
+    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, user.password);
     if (!isPasswordMatching) throw Boom.unauthorized();
 
-    const { token } = this.createToken(findUser);
+    const { token } = AuthService.createAuthToken(user);
 
-    return { token, findUser };
+    return { user, token };
   }
 
-  public createToken(user: User): TokenData {
+  public static createAuthToken(user: User, expiresIn = '7d'): TokenData {
     const dataStoredInToken: DataStoredInToken = { id: user.id };
     const secret: string = process.env.JWT_SECRET;
-    const expiresIn: number = 60 * 60;
 
     return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
   }
